@@ -17,7 +17,7 @@ A simple Rails app to display top NFT collections and their NFTs.
 ## Setup
 1. Clone the repo  
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/gitJackG/nft-analytics.git
 
 2. Install dependencies
    ```bash
