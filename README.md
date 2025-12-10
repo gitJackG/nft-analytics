@@ -3,10 +3,10 @@
 A simple Rails app to display top NFT collections and their NFTs.
 
 ## Features
-- Fetch top NFT collections from OpenSea API
 - View collection metadata and images
 - Display NFTs in each collection
 - Background jobs with Sidekiq for fetching/updating data
+- Display collection and nft analytics with ClickHouse (Work in progress)
 
 ## Technologies
 - Ruby on Rails
