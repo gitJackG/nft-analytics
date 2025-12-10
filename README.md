@@ -1,24 +1,40 @@
-# README
+# NFT Analytics Dashboard
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A simple Rails app to display top NFT collections and their NFTs.
 
-Things you may want to cover:
+## Features
+- Fetch top NFT collections from OpenSea API
+- View collection metadata and images
+- Display NFTs in each collection
+- Background jobs with Sidekiq for fetching/updating data
 
-* Ruby version
+## Technologies
+- Ruby on Rails
+- Sidekiq
+- SQLite / ClickHouse (for analytics)
+- OpenSea API
 
-* System dependencies
+## Setup
+1. Clone the repo  
+   ```bash
+   git clone <repo-url>
 
-* Configuration
+2. Install dependencies
+   ```bash
+    bundle install
 
-* Database creation
+3. Set your OpenSea API key in credentials.yml.enc
 
-* Database initialization
+4. Setup the database
+   ```bash
+    rails db:create db:migrate
 
-* How to run the test suite
+5. Start Sidekiq
+   ```bash
+    bundle exec sidekiq
 
-* Services (job queues, cache servers, search engines, etc.)
+6. Start the Rails server
+   ```bash
+    rails server
 
-* Deployment instructions
-
-* ...
+7. Visit http://localhost:3000 to see the dashboard
