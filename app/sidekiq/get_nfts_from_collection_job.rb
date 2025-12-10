@@ -1,6 +1,6 @@
-require 'uri'
-require 'net/http'
-require 'json'
+require "uri"
+require "net/http"
+require "json"
 
 class GetNftsFromCollectionJob
   include Sidekiq::Job
@@ -13,7 +13,7 @@ class GetNftsFromCollectionJob
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     request = Net::HTTP::Get.new(url)
-    request["accept"] = '*/*'
+    request["accept"] = "*/*"
     request["x-api-key"] = opensea_api_key
 
     response = http.request(request)

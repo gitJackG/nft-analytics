@@ -69,10 +69,10 @@ gem "sidekiq", "~> 8.0"
 gem "redis"
 gem "connection_pool", "~> 2.2"
 gem "eth"
-gem 'sidekiq-scheduler'
+gem "sidekiq-scheduler"
 
-gem 'faye-websocket'
-gem 'eventmachine'
-gem 'httparty'
+gem "faye-websocket"
+gem "eventmachine"
+gem "httparty"
 gem "sidekiq-cron"
-gem 'friendly_id', '~> 5.5.0'
+gem "friendly_id", "~> 5.5.0"

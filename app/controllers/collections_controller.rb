@@ -8,7 +8,6 @@ class CollectionsController < ApplicationController
       GetNftsFromCollectionJob.perform_async(@collection.slug_name)
       flash.now[:notice] = "No NFTs found for this collection yet. Fetching now..."
     end
-    
   end
 
   private
