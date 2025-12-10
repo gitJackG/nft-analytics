@@ -1,0 +1,24 @@
+<div class="collection-container">
+  <div class="collection-header">
+    <img src="<%= @collection.banner_image_url %>" alt="<%= @collection.name %>", class="collection-header-banner"/>
+    <div class="collection-header-overlay">
+      <h1><%= @collection.name %></h1>
+      <p><%= @collection.description %></p>
+    </div>
+  </div>
+  <div class="collection-content">
+    <div class="collection-content-nfts">
+      <% @nfts.each do |nft| %>
+        <div class="collection-content-nfts-item">
+          <img src="<%= nft.display_image_url%>"/>
+          <div class="collection-content-nfts-item-text">
+            <p><%= nft.name %></p>
+            <p><%= nft.name %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="collection-content-stats">
+      <h2>Collection Statistics</h2>
+  </div>
+</div>

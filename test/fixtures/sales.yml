@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nft: one
+  marketplace: MyString
+  buyer_address: MyString
+  seller_address: MyString
+  taker: MyString
+  price_eth: 9.99
+  block_number: 1
+  transaction_hash: MyString
+  timestamp: 2025-12-10 13:07:17
+
+two:
+  nft: two
+  marketplace: MyString
+  buyer_address: MyString
+  seller_address: MyString
+  taker: MyString
+  price_eth: 9.99
+  block_number: 1
+  transaction_hash: MyString
+  timestamp: 2025-12-10 13:07:17

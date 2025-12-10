@@ -1,0 +1,18 @@
+<div class="dashboard-container">
+  <div class ="dashboard-header">
+    <h1>Top NFT Collections</h1>
+
+    <h2>Last refreshed: <%= @last_refreshed || "Never" %></h2>
+  </div>
+  <br>
+    <div class="dashboard-collections-section">
+      <% @collections.each do |collection| %>
+        <%= link_to collection_path(collection.slug), class: "dashboard-collection-card-link" do %>
+          <div class="dashboard-collection-card">
+            <%= image_tag collection.image_url, alt: collection.name, class: "dashboard-collection-image" %>
+            <h2 class="dashboard-collection-name"><%= collection.name %></h2>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+</div>
