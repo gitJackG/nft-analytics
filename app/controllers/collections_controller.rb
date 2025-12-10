@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
-  before_action :set_collection, only: %i[ show ]
+  before_action :set_collection, only: %i[ show event ]
 
   def show
     @nfts = @collection.nfts.order(:identifier)
@@ -8,6 +8,10 @@ class CollectionsController < ApplicationController
       GetNftsFromCollectionJob.perform_async(@collection.slug_name)
       flash.now[:notice] = "No NFTs found for this collection yet. Fetching now..."
     end
+  end
+
+  def event
+    GetCollectionEventDataJob.perform_async(@collection.slug_name)
   end
 
   private

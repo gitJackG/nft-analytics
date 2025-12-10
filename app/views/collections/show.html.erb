@@ -6,6 +6,7 @@
       <p><%= @collection.description %></p>
     </div>
   </div>
+  <%= button_to 'Fetch Event Data', event_collection_path()%>
   <div class="collection-content">
     <div class="collection-content-nfts">
       <% @nfts.each do |nft| %>

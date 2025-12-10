@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get "dashboard/main"
 
   get "collections/:id", to: "collections#show", as: :collection
-
+  post "collections/:id/event", to: "collections#event", as: :event_collection
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
