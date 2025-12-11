@@ -6,13 +6,11 @@
       <p><%= @collection.description %></p>
     </div>
   </div>
-  <%= button_to 'Fetch Event Data', event_collection_path()%>
   <div class="collection-content">
-    <%= turbo_stream_from "collection_stats_#{@collection.slug_name}" %>
-
+    <h2>DAILY ANALYTICS (UPDATED HOURLY)</h2>
+    <br>
     <div id="collection_stats">
-      <h2>DAILY ANALYTICS (UPDATED HOURLY)</h2>
-      <br>
+      <%= turbo_stream_from "collection_stats_#{@collection.slug_name}" %>
       <%= render "collections/collection_stats", results: @results %>
     </div>
     <br>

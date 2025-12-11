@@ -1,4 +1,4 @@
-colletion_event_job:
-  cron: "0 * * * *" #hourly
+collection_event_job:
+  cron: "*/1 * * * *"
   class: "GetCollectionEventDataJob"
   queue: default
