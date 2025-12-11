@@ -2,7 +2,7 @@ class CollectionsController < ApplicationController
   before_action :set_collection, only: %i[ show event ]
 
   def show
-    @nfts = @collection.nfts.order(:identifier)
+    @nfts = @collection.nfts.order(:token_id)
 
     if @nfts.empty?
       GetNftsFromCollectionJob.perform_async(@collection.slug_name)

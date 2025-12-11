@@ -9,7 +9,7 @@ class GetCollectionEventDataJob
     collection = Collection.friendly.find(collection_slug)
     opensea_api_key = Rails.application.credentials.opensea_api_key
 
-    url = URI("https://api.opensea.io/api/v2/events/collection/#{collection_slug}?limit=1")
+    url = URI("https://api.opensea.io/api/v2/events/collection/#{collection_slug}?limit=2")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     request = Net::HTTP::Get.new(url)
@@ -17,6 +17,7 @@ class GetCollectionEventDataJob
     request["x-api-key"] = opensea_api_key
 
     response = http.request(request)
+    puts collection_slug
     puts response.read_body
 
     # Update last refresh time
