@@ -24,7 +24,7 @@ class GetNftsFromCollectionJob
     data = JSON.parse(response.body)
     nfts = data["nfts"] || []  # depending on API response key
     nfts.each do |nft_data|
-      Nft.find_or_initialize_by(collection_id: collection.id, identifier: nft_data["identifier"]).tap do |nft|
+      Nft.find_or_initialize_by(collection_id: collection.id, token_id: nft_data["identifier"]).tap do |nft|
         nft.assign_attributes(
           name:                  nft_data["name"],
           description:           nft_data["description"],

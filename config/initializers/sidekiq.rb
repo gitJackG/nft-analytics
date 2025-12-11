@@ -1,1 +1,1 @@
-require 'sidekiq-scheduler'
+require "sidekiq-scheduler"

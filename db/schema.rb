@@ -14,6 +14,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_10_160449) do
   create_table "collections", force: :cascade do |t|
     t.string "banner_image_url"
     t.string "category"
+    t.string "contract_address"
     t.datetime "created_at", null: false
     t.text "description"
     t.string "image_url"
@@ -46,17 +47,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_10_160449) do
     t.text "description"
     t.string "display_animation_url"
     t.string "display_image_url"
-    t.string "identifier", null: false
     t.string "image_url"
     t.boolean "is_disabled", default: false
     t.boolean "is_nsfw", default: false
     t.string "metadata_url"
     t.string "name"
     t.string "opensea_url"
+    t.string "token_id", null: false
     t.string "token_standard"
     t.datetime "updated_at", null: false
     t.datetime "updated_at_api"
-    t.index ["collection", "identifier"], name: "index_nfts_on_collection_and_identifier", unique: true
+    t.index ["collection", "token_id"], name: "index_nfts_on_collection_and_token_id", unique: true
     t.index ["collection_id"], name: "index_nfts_on_collection_id"
   end
 

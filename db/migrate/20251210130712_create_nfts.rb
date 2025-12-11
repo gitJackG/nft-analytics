@@ -1,7 +1,7 @@
 class CreateNfts < ActiveRecord::Migration[8.1]
   def change
     create_table :nfts do |t|
-      t.string   :identifier, null: false
+      t.string   :token_id, null: false
       t.string   :collection
       t.string   :contract
       t.string   :token_standard
@@ -19,6 +19,6 @@ class CreateNfts < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :nfts, [:collection, :identifier], unique: true
+    add_index :nfts, [ :collection, :token_id ], unique: true
   end
 end

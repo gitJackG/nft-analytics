@@ -44,6 +44,7 @@ class OpenseaCollectionsJob
         col.owner           = data["owner"]
         col.category        = data["category"]
         col.opensea_url     = data["opensea_url"]
+        col.contract_address= data["contracts"]&.first&.[]("address")
         col.save!
       end
     end

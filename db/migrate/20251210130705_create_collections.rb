@@ -9,6 +9,7 @@ class CreateCollections < ActiveRecord::Migration[8.1]
       t.string :owner
       t.string :category
       t.string :opensea_url
+      t.string :contract_address
       t.timestamps
     end
 
