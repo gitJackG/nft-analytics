@@ -6,7 +6,12 @@ A simple Rails app to display top NFT collections and their NFTs.
 - View collection metadata and images
 - Display NFTs in each collection
 - Background jobs with Sidekiq for fetching/updating data
-- Display collection and nft analytics with ClickHouse (Work in progress)
+- Display collection and nft analytics with ClickHouse 
+
+## TODO
+- Update what analytics to show
+- Update UI
+- Add jobs for other type of data (nft metada?)
 
 ## Technologies
 - Ruby on Rails
