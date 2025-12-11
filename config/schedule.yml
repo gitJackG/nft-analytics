@@ -1,0 +1,4 @@
+colletion_event_job:
+  cron: "*/1 * * * *"
+  class: "GetCollectionEventDataJob"
+  queue: default

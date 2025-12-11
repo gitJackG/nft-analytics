@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "collection_stats" do %>
+  <%= render "collections/collection_stats", results: (results || []) %>
+<% end %>

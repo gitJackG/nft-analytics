@@ -1,0 +1,13 @@
+<div class="collection-content-stats">
+  <% (results || []).each do |result| %>
+    <p class= "collection-content-stats-item">day <%= result["day"] %></p>
+    <p class= "collection-content-stats-item">sales <%= result["total_sales"] %></p>
+    <p class= "collection-content-stats-item">price <%= result["average_price"] %></p>
+    <p class= "collection-content-stats-item">transfers <%= result["total_transfers"] %></p>
+    <p class= "collection-content-stats-item">orders <%= result["total_orders"] %></p>
+  <% end %>
+
+  <% if (results || []).empty? %>
+    <p>No data available.</p>
+  <% end %>
+</div>

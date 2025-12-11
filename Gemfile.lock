@@ -101,6 +101,9 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    click_house (2.1.2)
+      activesupport
+      faraday (>= 1.7, < 3)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.5)
     crass (1.0.6)
@@ -127,6 +130,12 @@ GEM
       rlp (~> 0.7)
       scrypt (~> 3.0)
     eventmachine (1.2.7)
+    faraday (2.14.0)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.2)
+      net-http (~> 0.5)
     faye-websocket (0.12.0)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.8.0)
@@ -204,6 +213,8 @@ GEM
     msgpack (1.8.0)
     multi_xml (0.7.2)
       bigdecimal (~> 3.1)
+    net-http (0.8.0)
+      uri (>= 0.11.1)
     net-imap (0.5.12)
       date
       net-protocol
@@ -339,8 +350,6 @@ GEM
       ffi (~> 1.12)
       logger
     rubyzip (3.2.2)
-    rufus-scheduler (3.9.2)
-      fugit (~> 1.1, >= 1.11.1)
     scrypt (3.1.0)
       ffi-compiler (>= 1.0, < 2.0)
       rake (~> 13)
@@ -362,9 +371,6 @@ GEM
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
       sidekiq (>= 6.5.0)
-    sidekiq-scheduler (6.0.1)
-      rufus-scheduler (~> 3.2)
-      sidekiq (>= 7.3, < 9)
     solid_cable (3.0.12)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -443,6 +449,7 @@ DEPENDENCIES
   brakeman
   bundler-audit
   capybara
+  click_house
   connection_pool (~> 2.2)
   debug
   eth
@@ -462,7 +469,6 @@ DEPENDENCIES
   selenium-webdriver
   sidekiq (~> 8.0)
   sidekiq-cron
-  sidekiq-scheduler
   solid_cable
   solid_cache
   solid_queue
@@ -498,6 +504,7 @@ CHECKSUMS
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
   bundler-audit (0.9.3) sha256=81c8766c71e47d0d28a0f98c7eed028539f21a6ea3cd8f685eb6f42333c9b4e9
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
+  click_house (2.1.2) sha256=da008308b08126db58ef4a5669aebd3ceed460e0f3800d70c0fb01e91e27fede
   concurrent-ruby (1.3.5) sha256=813b3e37aca6df2a21a3b9f1d497f8cbab24a2b94cab325bffe65ee0f6cbebc6
   connection_pool (2.5.5) sha256=e54ff92855753df1fd7c59fa04a398833355f27dd14c074f8c83a05f72a716ad
   crass (1.0.6) sha256=dc516022a56e7b3b156099abc81b6d2b08ea1ed12676ac7a5657617f012bd45d
@@ -513,6 +520,8 @@ CHECKSUMS
   et-orbi (1.4.0) sha256=6c7e3c90779821f9e3b324c5e96fda9767f72995d6ae435b96678a4f3e2de8bc
   eth (0.4.18) sha256=ca10cd6c50f1614e39476339ea394f4334f6ea30b576e3e4899f05c163ad3de4
   eventmachine (1.2.7) sha256=994016e42aa041477ba9cff45cbe50de2047f25dd418eba003e84f0d16560972
+  faraday (2.14.0) sha256=8699cfe5d97e55268f2596f9a9d5a43736808a943714e3d9a53e6110593941cd
+  faraday-net_http (3.4.2) sha256=f147758260d3526939bf57ecf911682f94926a3666502e24c69992765875906c
   faye-websocket (0.12.0) sha256=ad9f7dfcd0306d0a13baeee450729657661129af15bb5f38716c242484ab42e1
   ffi (1.17.2-aarch64-linux-gnu) sha256=c910bd3cae70b76690418cce4572b7f6c208d271f323d692a067d59116211a1a
   ffi (1.17.2-aarch64-linux-musl) sha256=69e6556b091d45df83e6c3b19d3c54177c206910965155a6ec98de5e893c7b7c
@@ -547,6 +556,7 @@ CHECKSUMS
   money-tree (0.11.2) sha256=74cc90ee111b6717c5eb3f6b0614f65300759795b5acda7a73352c553f48f8e1
   msgpack (1.8.0) sha256=e64ce0212000d016809f5048b48eb3a65ffb169db22238fb4b72472fecb2d732
   multi_xml (0.7.2) sha256=307a96dc48613badb7b2fc174fd4e62d7c7b619bc36ea33bfd0c49f64f5787ce
+  net-http (0.8.0) sha256=df42c47ce9f9e95ad32a317c97c12f945bc1af365288837ea4ff259876ecb46d
   net-imap (0.5.12) sha256=cb8cd05bd353fcc19b6cbc530a9cb06b577a969ea10b7ddb0f37787f74be4444
   net-pop (0.1.2) sha256=848b4e982013c15b2f0382792268763b748cce91c9e91e36b0f27ed26420dff3
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
@@ -599,13 +609,11 @@ CHECKSUMS
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   ruby-vips (2.2.5) sha256=f3c547a172c36ba26b8614c809f5823bc6199623ec6204ec7c3bce29037f7758
   rubyzip (3.2.2) sha256=c0ed99385f0625415c8f05bcae33fe649ed2952894a95ff8b08f26ca57ea5b3c
-  rufus-scheduler (3.9.2) sha256=55fa9e4db0ff69d7f38c804f17baba0c9bce5cba39984ae3c5cf6c039d1323b9
   scrypt (3.1.0) sha256=67fde35bc7e3b7fe906c5be9c242acf95fe4a886c89572f405f6b11df30aa6af
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   selenium-webdriver (4.39.0) sha256=984a1e63d39472eaf286bac3c6f1822fa7eea6eed9c07a66ce7b3bc5417ba826
   sidekiq (8.0.10) sha256=37ccd8da8d46f6779b8655cb30c1bfcb0decd57e890ff56d8b8252a5d9a84cd6
   sidekiq-cron (2.3.1) sha256=96ab3da372289a30dc744c1daa2ae2e85960b2444a6f6ed68df1ff7882c44aac
-  sidekiq-scheduler (6.0.1) sha256=e1fc04e851a3e2d9896bc6ab00f03d790fef8923bb56915e5b141804bca34062
   solid_cable (3.0.12) sha256=a168a54731a455d5627af48d8441ea3b554b8c1f6e6cd6074109de493e6b0460
   solid_cache (1.0.10) sha256=bc05a2fb3ac78a6f43cbb5946679cf9db67dd30d22939ededc385cb93e120d41
   solid_queue (1.2.4) sha256=bb60f9552a969ac377d87601b0ff6a088f5e6f20b0cbbe3844a59d022cac0e4b
