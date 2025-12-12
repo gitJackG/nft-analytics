@@ -93,76 +93,91 @@ class GetCollectionEventDataJob
           raw_quantity: raw_quantity
         }
       end
-
-      # Insert all events at once (fastest)
       client.insert("collection_events", rows)
 
-      sales_results = ClickHouse.connection.select_all("
+      # sales_results = ClickHouse.connection.select_all("
+      #   SELECT
+      #     toStartOfHour(event_timestamp) AS hour,
+      #     countIf(event_type = 'sale') AS total_sales,
+      #     sumIf(price, event_type = 'sale') AS total_volume,
+      #     avgIf(price, event_type = 'sale') AS average_price,
+      #     minIf(price, event_type = 'sale') AS floor_price,
+      #     uniqIf(taker, event_type = 'sale') AS unique_buyers,
+      #     uniqIf(maker, event_type = 'sale') AS unique_sellers
+      #   FROM collection_events
+      #   WHERE collection_slug = '#{slug}' AND event_type = 'sale'
+      #   GROUP BY hour
+      #   ORDER BY hour DESC
+      # ").to_a
+
+      # orders_results = ClickHouse.connection.select_all("
+      #   SELECT
+      #     toStartOfHour(event_timestamp) AS hour,
+      #     countIf(event_type = 'order') AS total_orders,
+      #     countIf(order_type = 'item_offer') AS total_item_offers,
+      #     countIf(order_type = 'listing') AS total_listings,
+      #     countIf(order_type = 'trait_offer') AS total_trait_offers,
+      #     uniqIf(maker, event_type = 'order') AS unique_order_makers,
+      #     uniqIf(taker, event_type = 'order') AS unique_order_takers,
+      #     argMax(maker, event_timestamp) AS latest_order_maker,
+      #     MAX(event_timestamp) AS latest_order_timestamp
+      #   FROM collection_events
+      #   WHERE collection_slug = '#{slug}' AND event_type = 'order'
+      #   GROUP BY hour
+      #   ORDER BY hour DESC
+      # ").to_a
+
+      # transfers_results = ClickHouse.connection.select_all("
+      #   SELECT
+      #     toStartOfHour(event_timestamp) AS hour,
+      #     countIf(event_type = 'transfer') AS total_transfers,
+      #     uniq(maker) AS unique_transfer_senders,
+      #     uniq(taker) AS unique_transfer_receivers,
+      #     argMax(maker, event_timestamp) AS latest_transfer_sender,
+      #     argMax(taker, event_timestamp) AS latest_transfer_receiver,
+      #     MAX(event_timestamp) AS latest_transfer_timestamp
+      #   FROM collection_events
+      #   WHERE collection_slug = '#{slug}' AND event_type = 'transfer'
+      #   GROUP BY hour
+      #   ORDER BY hour DESC
+      # ").to_a
+
+      # results = {
+      #   sales_data: sales_results,
+      #   orders_data: orders_results,
+      #   transfers_data: transfers_results
+      # }
+
+      results = ClickHouse.connection.select_all("
         SELECT
           toStartOfHour(event_timestamp) AS hour,
           countIf(event_type = 'sale') AS total_sales,
-          sumIf(price, event_type = 'sale') AS total_volume,
-          avgIf(price, event_type = 'sale') AS average_price,
-          minIf(price, event_type = 'sale') AS floor_price,
-          uniqIf(taker, event_type = 'sale') AS unique_buyers,
-          uniqIf(maker, event_type = 'sale') AS unique_sellers
-        FROM collection_events
-        WHERE collection_slug = '#{slug}' AND event_type = 'sale'
-        GROUP BY hour
-        ORDER BY hour DESC
-      ").to_a
-
-      orders_results = ClickHouse.connection.select_all("
-        SELECT
-          toStartOfHour(event_timestamp) AS hour,
           countIf(event_type = 'order') AS total_orders,
-          countIf(order_type = 'item_offer') AS total_item_offers,
-          countIf(order_type = 'listing') AS total_listings,
-          countIf(order_type = 'trait_offer') AS total_trait_offers,
-          uniqIf(maker, event_type = 'order') AS unique_order_makers,
-          uniqIf(taker, event_type = 'order') AS unique_order_takers,
-          argMax(maker, event_timestamp) AS latest_order_maker,
-          MAX(event_timestamp) AS latest_order_timestamp
-        FROM collection_events
-        WHERE collection_slug = '#{slug}' AND event_type = 'order'
-        GROUP BY hour
-        ORDER BY hour DESC
-      ").to_a
-
-      transfers_results = ClickHouse.connection.select_all("
-        SELECT
-          toStartOfHour(event_timestamp) AS hour,
           countIf(event_type = 'transfer') AS total_transfers,
-          uniq(maker) AS unique_transfer_senders,
-          uniq(taker) AS unique_transfer_receivers,
-          argMax(maker, event_timestamp) AS latest_transfer_sender,
-          argMax(taker, event_timestamp) AS latest_transfer_receiver,
-          MAX(event_timestamp) AS latest_transfer_timestamp
+          uniq(maker) AS unique_senders,
+          uniq(taker) AS unique_receivers,
+          argMax(maker, event_timestamp) AS latest_sender,
+          argMax(taker, event_timestamp) AS latest_receiver,
+          MAX(event_timestamp) AS latest_timestamp
         FROM collection_events
-        WHERE collection_slug = '#{slug}' AND event_type = 'transfer'
+        WHERE collection_slug = '#{slug}'
         GROUP BY hour
         ORDER BY hour DESC
       ").to_a
 
-      results = {
-        sales_data: sales_results,
-        orders_data: orders_results,
-        transfers_data: transfers_results
-      }
+      if slug == "cryptopunks"
+        puts results
+      end
 
-      rendered_html = renderer.render(
-        partial: "collections/collection_stats",
-        locals: { results: results }
-        # Note: We omit the format here, forcing it to render the standard HTML partial.
-      )
-
-      Turbo::StreamsChannel.broadcast_update_to(
-        "collection_stats_#{slug}",
-        target: "collection_stats",
-        html: rendered_html
-      )
+      results.each do |row|
+        Turbo::StreamsChannel.broadcast_replace_to(
+          "collection_stats_#{slug}",
+          target: "hour_#{row["hour"].to_i}",
+          partial: "collections/collection_stats",
+          locals: { row: row }
+        )
+      end
     end
-    # Update last refresh time
     Rails.cache.write("last_refreshed", Time.now.utc)
 
   rescue => e

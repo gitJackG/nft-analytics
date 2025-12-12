@@ -17,12 +17,10 @@ class GetNftsFromCollectionJob
     request["x-api-key"] = opensea_api_key
 
     response = http.request(request)
-
-    # Only proceed if successful
     return unless response.is_a?(Net::HTTPSuccess)
 
     data = JSON.parse(response.body)
-    nfts = data["nfts"] || []  # depending on API response key
+    nfts = data["nfts"] || []
     nfts.each do |nft_data|
       Nft.find_or_initialize_by(collection_id: collection.id, token_id: nft_data["identifier"]).tap do |nft|
         nft.assign_attributes(
@@ -43,7 +41,6 @@ class GetNftsFromCollectionJob
       end
     end
 
-    # Update last refresh time
     Rails.cache.write("last_refreshed", Time.now.utc)
 
   rescue => e

@@ -1,7 +1,7 @@
 ClickHouse.config do |config|
   config.logger = Logger.new(STDOUT)
   config.adapter = :net_http
-  config.database = "nft_analytics"
+  config.database = "default"
   config.url = "http://localhost:8123"
   config.timeout = 60
   config.open_timeout = 3

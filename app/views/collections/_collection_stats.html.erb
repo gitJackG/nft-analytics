@@ -1,59 +1,11 @@
-<%
-  sales_results     = results[:sales_data]     || []
-  orders_results    = results[:orders_data]    || []
-  transfers_results = results[:transfers_data] || []
-%>
-
-<div class="stats-dark-container">
-
-  <div class="stats-column">
-    <h2 class="stats-title sales">Sales</h2>
-
-    <% sales_results.each do |row| %>
-      <div class="stats-row">
-        <div class="stats-label">Hour</div><div><%= row["hour"] %></div>
-        <div class="stats-label">Total Sales</div><div><%= row["total_sales"] %></div>
-        <div class="stats-label">Total Volume</div><div><%= row["total_volume"] %></div>
-        <div class="stats-label">Avg Price</div><div><%= row["average_price"] %></div>
-        <div class="stats-label">Floor</div><div><%= row["floor_price"] %></div>
-        <div class="stats-label">Buyers</div><div><%= row["unique_buyers"] %></div>
-        <div class="stats-label">Sellers</div><div><%= row["unique_sellers"] %></div>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="stats-column">
-    <h2 class="stats-title orders">Orders</h2>
-
-    <% orders_results.each do |row| %>
-      <div class="stats-row">
-        <div class="stats-label">Hour</div><div><%= row["hour"] %></div>
-        <div class="stats-label">Orders</div><div><%= row["total_orders"] %></div>
-        <div class="stats-label">Listings</div><div><%= row["total_listings"] %></div>
-        <div class="stats-label">Item Offers</div><div><%= row["total_item_offers"] %></div>
-        <div class="stats-label">Trait Offers</div><div><%= row["total_trait_offers"] %></div>
-        <div class="stats-label">Makers</div><div><%= row["unique_order_makers"] %></div>
-        <div class="stats-label">Takers</div><div><%= row["unique_order_takers"] %></div>
-        <div class="stats-label">Latest Maker</div><div><%= row["latest_order_maker"] %></div>
-        <div class="stats-label">Latest Time</div><div><%= row["latest_order_timestamp"] %></div>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="stats-column">
-    <h2 class="stats-title transfers">Transfers</h2>
-
-    <% transfers_results.each do |row| %>
-      <div class="stats-row">
-        <div class="stats-label">Hour</div><div><%= row["hour"] %></div>
-        <div class="stats-label">Transfers</div><div><%= row["total_transfers"] %></div>
-        <div class="stats-label">Senders</div><div><%= row["unique_transfer_senders"] %></div>
-        <div class="stats-label">Receivers</div><div><%= row["unique_transfer_receivers"] %></div>
-        <div class="stats-label">Latest Sender</div><div><%= row["latest_transfer_sender"] %></div>
-        <div class="stats-label">Latest Receiver</div><div><%= row["latest_transfer_receiver"] %></div>
-        <div class="stats-label">Latest Time</div><div><%= row["latest_transfer_timestamp"] %></div>
-      </div>
-    <% end %>
-  </div>
-
-</div>
+<tr id="hour_<%= row["hour"].to_i %>">
+  <td><%= row["hour"] %></td>
+  <td><%= row["total_sales"] %></td>
+  <td><%= row["total_orders"] %></td>
+  <td><%= row["total_transfers"] %></td>
+  <td><%= row["unique_senders"] %></td>
+  <td><%= row["unique_receivers"] %></td>
+  <td><%= row["latest_sender"] %></td>
+  <td><%= row["latest_receiver"] %></td>
+  <td><%= row["latest_timestamp"] %></td>
+</tr>
