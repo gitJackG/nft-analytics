@@ -82,31 +82,25 @@
     filter: brightness(0);
 }
 
-.collection-content-nfts-item p {
+.collection-content-nfts-item:hover .collection-content-nfts-item-text {
+    transform: translateY(0);
+}
+
+.collection-content-nfts-item-text {
     position: absolute;    
+    gap: 0.5rem;
     z-index: 2;
     inset: 0;                
     margin: 0;
     padding: 1rem;
     color: #fff;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     transform: translateY(100%);
     transition: all 0.2s ease-in-out;
-}
-
-.collection-content-nfts-item:hover p {
-    transform: translateY(0);
-}
-
-.collection-content-nfts-item-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: small;
 }
 
 .collection-content-stats{
