@@ -28,11 +28,11 @@ class CollectionsController < ApplicationController
       SELECT
         toStartOfHour(event_timestamp) AS hour,
         countIf(event_type = 'order') AS total_orders,
-        countIf(order_type = 'item_offer') AS total_item_offers,       
-        countIf(order_type = 'listing') AS total_listings,  
-        countIf(order_type = 'trait_offer') AS total_trait_offers,  
+        countIf(order_type = 'item_offer') AS total_item_offers,
+        countIf(order_type = 'listing') AS total_listings,
+        countIf(order_type = 'trait_offer') AS total_trait_offers,
         uniqIf(maker, event_type = 'order') AS unique_order_makers,
-        uniqIf(taker, event_type = 'order') AS unique_order_takers, 
+        uniqIf(taker, event_type = 'order') AS unique_order_takers,
         argMax(maker, event_timestamp) AS latest_order_maker,
         MAX(event_timestamp) AS latest_order_timestamp
       FROM collection_events
