@@ -9,32 +9,10 @@
   <div class="collection-content">
     <h2>DAILY ANALYTICS (UPDATED HOURLY)</h2>
     <br>
-    <div id="collection_stats">
-      <%= turbo_stream_from "collection_stats_#{@collection.slug_name}" %>
-
-      <table class="hourly-events-table">
-        <thead>
-          <tr>
-            <th>Hour</th>
-            <th>Total Sales</th>
-            <th>Total Orders</th>
-            <th>Total Transfers</th>
-            <th>Unique Senders</th>
-            <th>Unique Receivers</th>
-            <th>Latest Sender</th>
-            <th>Latest Receiver</th>
-            <th>Latest Timestamp</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% @results.each do |row| %>
-            <%= render "collections/collection_stats", row: row %>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-
+    <%= turbo_stream_from "collections" %>
+    <turbo-frame id="collection_stats" data-turbo-action="replace">
+      <%= render "collection_stats", results: @results %>
+    </turbo-frame>
     <br>
     <br>
     <h2>NFTs</h2>

@@ -1,11 +1,32 @@
-<tr id="hour_<%= row["hour"].to_i %>">
-  <td><%= row["hour"] %></td>
-  <td><%= row["total_sales"] %></td>
-  <td><%= row["total_orders"] %></td>
-  <td><%= row["total_transfers"] %></td>
-  <td><%= row["unique_senders"] %></td>
-  <td><%= row["unique_receivers"] %></td>
-  <td><%= row["latest_sender"] %></td>
-  <td><%= row["latest_receiver"] %></td>
-  <td><%= row["latest_timestamp"] %></td>
-</tr>
+
+<table class="hourly-events-table">
+  <thead>
+    <tr>
+      <th>Hour</th>
+      <th>Total Sales</th>
+      <th>Total Orders</th>
+      <th>Total Transfers</th>
+      <th>Unique Senders</th>
+      <th>Unique Receivers</th>
+      <th>Latest Sender</th>
+      <th>Latest Receiver</th>
+      <th>Latest Timestamp</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @results.each do |row| %>
+      <tr>
+        <td><%= row["hour"] %></td>
+        <td><%= row["total_sales"] %></td>
+        <td><%= row["total_orders"] %></td>
+        <td><%= row["total_transfers"] %></td>
+        <td><%= row["unique_senders"] %></td>
+        <td><%= row["unique_receivers"] %></td>
+        <td><%= row["latest_sender"] %></td>
+        <td><%= row["latest_receiver"] %></td>
+        <td><%= row["latest_timestamp"] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
