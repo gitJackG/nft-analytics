@@ -68,7 +68,7 @@ end
 # Custom gems
 gem "sidekiq", "~> 8.0"
 gem "redis"
-gem "connection_pool", "~> 2.2"
+gem "connection_pool", "~> 3.0"
 gem "eth"
 
 gem "faye-websocket"
