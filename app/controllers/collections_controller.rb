@@ -20,6 +20,31 @@ class CollectionsController < ApplicationController
       GROUP BY hour
       ORDER BY hour DESC
     ").to_a
+
+    metrics = {
+      "Total Sales" => "total_sales",
+      "Total Orders" => "total_orders",
+      "Total Transfers" => "total_transfers"
+    }
+
+    reversed_results = @results.reverse
+
+    @hourly_chart_data = metrics.map do |label, key|
+      {
+        name: label,
+        data: reversed_results.map { |r| [ r["hour"], r[key] ]  }
+      }
+    end
+
+    @hourly_chart_data << {
+      name: "Total Events",
+      data: reversed_results.map do |r|
+        [
+          r["hour"],
+          r["total_sales"] + r["total_orders"] + r["total_transfers"]
+        ]
+      end
+    }
   end
 
   private

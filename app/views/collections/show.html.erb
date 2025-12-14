@@ -8,7 +8,6 @@
   </div>
   <div class="collection-content">
     <h2>DAILY ANALYTICS (UPDATED HOURLY)</h2>
-    <br>
     <%= turbo_stream_from "collections" %>
     <turbo-frame id="collection_stats" data-turbo-action="replace">
       <%= render "collection_stats", results: @results %>

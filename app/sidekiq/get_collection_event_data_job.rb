@@ -62,14 +62,8 @@ class GetCollectionEventDataJob
         token_id = e.dig("asset", "identifier") ||
                   e.dig("nft", "identifier") ||
                   ""
-
-        maker = e["maker"] || ""
-        taker = e["taker"] || ""
-        from_address = e["from_address"] || ""
-        to_address   = e["to_address"] || ""
-
-        trait_type  = e.dig("criteria", "trait", "type") || ""
-        trait_value = e.dig("criteria", "trait", "value") || ""
+        maker = e["maker"] || e["from_address"] || e["buyer"] || ""
+        taker = e["taker"] || e["to_address"] || e["seller"] || ""
 
         order_type  = e["order_type"] || ""
         raw_quantity = e["quantity"] || 1
@@ -85,11 +79,7 @@ class GetCollectionEventDataJob
           payment_token: payment_token,
           maker: maker,
           taker: taker,
-          from_address: from_address,
-          to_address: to_address,
           order_type: order_type,
-          trait_type: trait_type,
-          trait_value: trait_value,
           raw_quantity: raw_quantity
         }
       end

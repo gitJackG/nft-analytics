@@ -2,14 +2,12 @@
 
 A simple Rails app to display top NFT collections and their NFTs.
 
-## FIX
-Trying to fix dynamic UI to show data in "real time". Right now the sidekiq job is aggregating data wrongly.
-
 ## Features
 - View collection metadata and images
 - Display NFTs in each collection
 - Background jobs with Sidekiq for fetching/updating data
-- Display collection and nft analytics with ClickHouse 
+- Display collection and nft analytics with ClickHouse
+- Dynamic analytics table and chart to view nft events in real-time
 
 ## TODO
 - Update what analytics to show
@@ -48,7 +46,7 @@ Trying to fix dynamic UI to show data in "real time". Right now the sidekiq job 
    sudo service clickhouse-server start
    CREATE DATABASE nft_analytics
    USE default
-   CREATE TABLE collection_events (     event_timestamp   DateTime,     event_date        Date MATERIALIZED toDate(event_timestamp),     event_type        String,     collection_slug   String,     contract_address  String,     token_id          String DEFAULT '',     price             Float64 DEFAULT 0,     payment_symbol    String,     payment_token     String,     maker             String,     taker             String,     from_address      String DEFAULT '',     to_address        String DEFAULT '',     order_type        String DEFAULT '',     trait_type        String DEFAULT '',     trait_value       String DEFAULT '',     raw_quantity      UInt64 DEFAULT 1 ) ENGINE = ReplacingMergeTree ORDER BY (collection_slug, event_timestamp);
+   CREATE TABLE collection_events (     event_timestamp   DateTime,     event_date        Date MATERIALIZED toDate(event_timestamp),     event_type        String,     collection_slug   String,     contract_address  String,     token_id          String DEFAULT '',     price             Float64 DEFAULT 0,     payment_symbol    String,     payment_token     String,     maker             String,     taker             String,     order_type        String DEFAULT '',     raw_quantity      UInt64 DEFAULT 1 ) ENGINE = ReplacingMergeTree ORDER BY (collection_slug, event_timestamp);
 
 3. Install dependencies
    ```bash

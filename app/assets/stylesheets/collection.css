@@ -120,30 +120,44 @@
 }
 
 .hourly-events-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(12px, 0.9vw, 14px);
 }
 
+.hourly-events-wrapper {
+    max-height: clamp(200px, 40vh, 500px);
+    overflow-y: auto;
+    padding-inline: clamp(1rem, 4vw, 10rem);
+}
+
+
 .hourly-events-table thead th {
-  background: #333;
-  padding: 10px;
-  text-align: left;
-  font-weight: 600;
-  border-bottom: 2px solid #dce1e7;
+    background: #333;
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #dce1e7;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .hourly-events-table tbody tr:hover {
-  background: #444;
+    background: #444;
 }
 
 .hourly-events-table td {
-  padding: 8px 10px;
-  border-bottom: 1px solid #e5e8ec;
-  white-space: nowrap;
+    padding: 8px 10px;
+    border-bottom: 1px solid #e5e8ec;
+    white-space: nowrap;
+}
+
+.sender-link {
+  color: inherit;
 }
 
 .hourly-events-table td:first-child {
-  font-weight: 600;
-  color: #333;
+    font-weight: 600;
+    color: #333;
 }

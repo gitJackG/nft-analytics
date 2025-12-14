@@ -77,3 +77,6 @@ gem "httparty"
 gem "sidekiq-cron"
 gem "friendly_id", "~> 5.5.0"
 gem "click_house"
+gem "chartkick"
+
+gem "groupdate", "~> 6.7"

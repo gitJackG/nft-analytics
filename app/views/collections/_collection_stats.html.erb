@@ -1,32 +1,47 @@
 
-<table class="hourly-events-table">
-  <thead>
-    <tr>
-      <th>Hour</th>
-      <th>Total Sales</th>
-      <th>Total Orders</th>
-      <th>Total Transfers</th>
-      <th>Unique Senders</th>
-      <th>Unique Receivers</th>
-      <th>Latest Sender</th>
-      <th>Latest Receiver</th>
-      <th>Latest Timestamp</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @results.each do |row| %>
+<div class="hourly-events-wrapper">
+  <table class="hourly-events-table">
+    <thead>
       <tr>
-        <td><%= row["hour"] %></td>
-        <td><%= row["total_sales"] %></td>
-        <td><%= row["total_orders"] %></td>
-        <td><%= row["total_transfers"] %></td>
-        <td><%= row["unique_senders"] %></td>
-        <td><%= row["unique_receivers"] %></td>
-        <td><%= row["latest_sender"] %></td>
-        <td><%= row["latest_receiver"] %></td>
-        <td><%= row["latest_timestamp"] %></td>
+        <th>Hour</th>
+        <th>Total Sales</th>
+        <th>Total Orders</th>
+        <th>Total Transfers</th>
+        <th>Unique Senders</th>
+        <th>Unique Receivers</th>
+        <th>Latest Sender</th>
+        <th>Latest Receiver</th>
+        <th>Latest Timestamp</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @results.each do |row| %>
+        <tr>
+          <td><%= row["hour"] %></td>
+          <td><%= row["total_sales"] %></td>
+          <td><%= row["total_orders"] %></td>
+          <td><%= row["total_transfers"] %></td>
+          <td><%= row["unique_senders"] %></td>
+          <td><%= row["unique_receivers"] %></td>
+          <td>
+            <%= link_to truncate(row["latest_sender"], length: 10), "https://opensea.io/#{row["latest_sender"]}", target: "_blank", rel: "noopener", class: "sender-link"%>
+          </td>
+          <td>
+            <%= link_to truncate(row["latest_receiver"], length: 10), "https://opensea.io/#{row["latest_receiver"]}", target: "_blank", rel: "noopener", class: "sender-link"%>
+          </td>
+          <td><%= row["latest_timestamp"] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<br>
+<br>
+<div class="hourly-events-wrapper">
+  <%= line_chart @hourly_chart_data,
+    xtitle: "Hour",
+    ytitle: "Events",
+    legend: "bottom"
+  %>
+</div>
