@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_10_160449) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_14_235752) do
   create_table "collections", force: :cascade do |t|
     t.string "banner_image_url"
     t.string "category"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_10_160449) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "image_url"
+    t.datetime "last_fetched_at"
     t.string "name"
     t.string "opensea_url"
     t.string "owner"

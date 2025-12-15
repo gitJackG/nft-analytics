@@ -14,7 +14,9 @@ class CollectionsController < ApplicationController
         uniq(taker) AS unique_receivers,
         argMax(maker, event_timestamp) AS latest_sender,
         argMax(taker, event_timestamp) AS latest_receiver,
-        MAX(event_timestamp) AS latest_timestamp
+        MAX(event_timestamp) AS latest_timestamp,
+        MAX(price) AS highest_price,
+        SUM(price) AS total_price
       FROM collection_events
       WHERE collection_slug = '#{@collection.slug_name}'
       GROUP BY hour
@@ -45,6 +47,11 @@ class CollectionsController < ApplicationController
         ]
       end
     }
+
+    # @hourly_price_date = {
+    #   name: "Total Price",
+    #   data: reversed_results.map { |r| [ r["hour"], r["total_price"] ]  }
+    # }
   end
 
   private

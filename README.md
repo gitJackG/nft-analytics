@@ -1,6 +1,6 @@
 # NFT Analytics Dashboard
 
-A simple Rails app to display top NFT collections and their NFTs.
+A simple Rails app to display top NFT collections and their NFTs. My aim with this project is to learn Rails, Sidekiq and ClickHouse.
 
 ## Features
 - View collection metadata and images
@@ -14,6 +14,8 @@ A simple Rails app to display top NFT collections and their NFTs.
 - Update UI
 - Add jobs for other type of data (nft metada?)
 - Dockerize for easier use
+- OpenSea API limit? 1 hour too long? Some collections take too long to fetch?
+- Create multiple jobs so no collection has to wait?
 
 ## Technologies
 - Ruby on Rails

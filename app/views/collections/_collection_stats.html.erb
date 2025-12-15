@@ -11,6 +11,7 @@
         <th>Unique Receivers</th>
         <th>Latest Sender</th>
         <th>Latest Receiver</th>
+        <th>Total Price (ETH)</th>
         <th>Latest Timestamp</th>
       </tr>
     </thead>
@@ -30,6 +31,7 @@
           <td>
             <%= link_to truncate(row["latest_receiver"], length: 10), "https://opensea.io/#{row["latest_receiver"]}", target: "_blank", rel: "noopener", class: "sender-link"%>
           </td>
+          <td><%= number_with_precision(row["total_price"], precision: 2) %></td>
           <td><%= row["latest_timestamp"] %></td>
         </tr>
       <% end %>

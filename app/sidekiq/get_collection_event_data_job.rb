@@ -57,7 +57,7 @@ class GetCollectionEventDataJob
         payment_symbol = e.dig("payment", "symbol") || ""
         payment_token  = e.dig("payment", "token_address") || ""
 
-        price = quantity_raw.to_f / (10**decimals)
+        price = BigDecimal(quantity_raw) / (10 ** decimals)
 
         token_id = e.dig("asset", "identifier") ||
                   e.dig("nft", "identifier") ||
