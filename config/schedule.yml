@@ -1,4 +1,4 @@
-collection_event_job:
-  cron: "*/10 * * * *"
-  class: "GetCollectionEventDataJob"
+collection_event_batch:
+  cron: "*/1 * * * *"
+  class: "EnqueueCollectionEventsJob"
   queue: default
