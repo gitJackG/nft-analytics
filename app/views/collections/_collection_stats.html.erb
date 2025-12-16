@@ -40,10 +40,37 @@
 </div>
 <br>
 <br>
-<div class="hourly-events-wrapper">
+<div class="hourly-chart-wrapper">
   <%= line_chart @hourly_chart_data,
-    xtitle: "Hour",
-    ytitle: "Events",
-    legend: "bottom"
+      xtitle: "Hour",
+      ytitle: "Events",
+      legend: "bottom",
+      library: {
+        plugins: {
+          legend: {
+            labels: { color: "#e5e7eb" }
+          },
+        },
+        scales: {
+          x: {
+            type: "time",
+            time: {
+              unit: "hour",
+              stepSize: 1,
+              displayFormats: {
+                hour: "HH:mm"
+              }
+            },
+            title: { color: "#e5e7eb" },
+            grid: { display: true, drawOnChartArea: true, drawTicks: true, drawBorder: false, color: "rgba(255,255,255,0.08)" },
+            ticks: { color: "#9ca3af", autoSkip: false }
+          },
+          y: {
+            title: { color: "#e5e7eb" },
+            grid: { display: true, drawBorder: false, color: "rgba(255,255,255,0.08)" },
+            ticks: { color: "#9ca3af" }
+          }
+        }
+      }
   %>
 </div>

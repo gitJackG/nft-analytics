@@ -2,8 +2,20 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    max-width: 80%;
-    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+
+}
+
+.dashboard-header h1 {
+    font-size: clamp(1.75rem, 3vw, 3rem);
+    line-height: 1.2;
+}
+
+.dashboard-header h2 {
+    font-size: clamp(.75rem, 1.8vw, 1.75rem);
+    line-height: 1.35;
 }
 
 .dashboard-header{
@@ -15,30 +27,32 @@
 }
 
 .dashboard-collections-section {
-    padding: 0 clamp(1rem, 2vw, 10rem);
+    max-width: 1000px;
+    width: 100%;
+
+    padding: 0 clamp(1rem, 2vw, 4rem);
+    margin: 0 auto;
+
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 2rem;
 }
 
+
 .dashboard-collection-card {
     width: 100%;
-    height: clamp(300px, 50vw, 400px);
+    aspect-ratio: 1/1;
     border-radius: clamp(0.5rem, 2vw, 1rem);
-    border: #000 2px solid;
     overflow: hidden;
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.25);
 }
 
 .dashboard-collection-card:hover {
     transform: scale(1.05); 
-    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.5);
-
 }
 
 .dashboard-collection-card:active {
@@ -46,27 +60,8 @@
 }
 
 .dashboard-collection-image {
-    border-bottom: #000 2px solid;
     inset: 0;
     width: 100%;
-    height: 85%;
+    height: 100%;
     object-fit: cover;
-    background: #fff;
-}
-
-.dashboard-collection-name {
-    display: block;     
-    padding: 0.5rem 1rem;    
-    line-height: 2rem;    
-    white-space: nowrap;
-    width: 100%;
-    height: 15%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    justify-content: center;
-    color: #000;
-    background: #fff;
-    flex: 0 0 auto;  
-    min-width: 0; 
 }
