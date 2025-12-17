@@ -2,3 +2,8 @@ collection_event_batch:
   cron: "*/1 * * * *"
   class: "EnqueueCollectionEventsJob"
   queue: default
+
+delete_old_collection_events:
+  cron: "0 * * * *"   
+  class: "DeleteOldEventsJob"
+  queue: maintenance

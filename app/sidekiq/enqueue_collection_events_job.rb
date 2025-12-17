@@ -19,10 +19,10 @@ class EnqueueCollectionEventsJob
   ].freeze
 
   def perform
+    puts "Page Refresh"
+    Rails.cache.write("last_refreshed", Time.now.utc)
     TOP_SLUGS.each do |slug|
       GetCollectionEventDataJob.perform_async(slug)
     end
-
-    Rails.cache.write("last_refreshed", Time.now.utc)
   end
 end

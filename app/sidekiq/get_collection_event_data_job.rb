@@ -8,50 +8,84 @@ class GetCollectionEventDataJob
   sidekiq_options queue: :opensea, retry: 5
 
   def perform(slug)
-    opensea_api_key = Rails.application.credentials.opensea_api_key
+    collection = Collection.friendly.find(slug)
+    api_key    = Rails.application.credentials.opensea_api_key
 
-    url = URI("https://api.opensea.io/api/v2/events/collection/#{slug}")
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    http.open_timeout = 5
-    http.read_timeout = 10
+    cutoff_time = [ collection.last_fetched_at, 1.hour.ago ].compact.max
+    cutoff_ts   = cutoff_time.to_i
 
-    request = Net::HTTP::Get.new(url)
-    request["accept"] = "*/*"
-    request["x-api-key"] = opensea_api_key
+    next_cursor    = nil
+    newest_seen_ts = cutoff_ts
+    puts "Started #{slug}"
+    page = 0
+    loop do
+      page += 1
+      puts "Fetching page #{page} of #{slug}"
+      uri = URI("https://api.opensea.io/api/v2/events/collection/#{slug}")
+      params = {}
+      params[:next] = next_cursor if next_cursor
+      uri.query = URI.encode_www_form(params) if params.any?
 
-    response = http.request(request)
-    body = JSON.parse(response.body)
-    events = body["asset_events"] || []
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.open_timeout = 5
+      http.read_timeout = 10
 
-    rows = []
-    puts slug
-    events.each do |e|
-      ts = Time.at(e["event_timestamp"]).utc.strftime("%Y-%m-%d %H:%M:%S")
+      request = Net::HTTP::Get.new(uri)
+      request["accept"] = "*/*"
+      request["x-api-key"] = api_key
 
-      quantity_raw = e.dig("payment", "quantity") || "0"
-      decimals     = e.dig("payment", "decimals") || 18
-      price        = BigDecimal(quantity_raw) / (10 ** decimals)
+      response = http.request(request)
+      body     = JSON.parse(response.body)
+      events   = body["asset_events"] || []
 
-      rows << {
-        event_timestamp: ts,
-        event_type: e["event_type"],
-        collection_slug: e.dig("criteria", "collection", "slug") || slug,
-        contract_address: e.dig("criteria", "contract", "address") || "",
-        token_id: e.dig("asset", "identifier") || e.dig("nft", "identifier") || "",
-        price: price,
-        payment_symbol: e.dig("payment", "symbol") || "",
-        payment_token: e.dig("payment", "token_address") || "",
-        maker: e["maker"] || e["from_address"] || e["buyer"] || "",
-        taker: e["taker"] || e["to_address"] || e["seller"] || "",
-        order_type: e["order_type"] || "",
-        raw_quantity: e["quantity"] || 1
-      }
+      break if events.empty?
+
+      rows = []
+
+      events.each do |e|
+        ts = e["event_timestamp"].to_i
+        break if ts < cutoff_ts
+
+        newest_seen_ts = [ newest_seen_ts, ts ].max
+
+        quantity_raw = e.dig("payment", "quantity") || "0"
+        decimals     = e.dig("payment", "decimals") || 18
+        price        = BigDecimal(quantity_raw) / (10 ** decimals)
+
+        rows << {
+          event_timestamp: Time.at(ts).utc.strftime("%Y-%m-%d %H:%M:%S"),
+          event_type: e["event_type"],
+          collection_slug: e.dig("criteria", "collection", "slug") || slug,
+          contract_address: e.dig("criteria", "contract", "address") || "",
+          token_id: e.dig("asset", "identifier") ||
+                    e.dig("nft", "identifier") ||
+                    "",
+          price: price,
+          payment_symbol: e.dig("payment", "symbol") || "",
+          payment_token: e.dig("payment", "token_address") || "",
+          maker: e["maker"] || e["from_address"] || e["buyer"] || "",
+          taker: e["taker"] || e["to_address"] || e["seller"] || "",
+          order_type: e["order_type"] || "",
+          raw_quantity: e["quantity"] || 1
+        }
+      end
+
+      ClickHouse.connection.insert("collection_events", rows) if rows.any?
+
+      next_cursor = body["next"]
+      break if next_cursor.blank?
+      break if events.last["event_timestamp"].to_i < cutoff_ts
     end
-    puts "Ended #{slug}"
+
+    if newest_seen_ts > cutoff_ts
+      collection.update_column(
+        :last_fetched_at,
+        Time.at(newest_seen_ts).utc
+      )
+    end
     Turbo::StreamsChannel.broadcast_refresh_to("collections")
-    Rails.cache.write("last_refreshed", Time.now.utc)
-    ClickHouse.connection.insert("collection_events", rows) if rows.any?
+    puts "Ended #{slug}"
   rescue => e
     Rails.logger.error("Failed fetching NFTs for #{slug}: #{e.message}")
     raise e
