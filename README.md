@@ -12,10 +12,8 @@ A simple Rails app to display top NFT collections and their NFTs. My aim with th
 ## TODO
 - Update what analytics to show
 - Update UI
-- Add jobs for other type of data (nft metada?)
-- Dockerize for easier use
-- OpenSea API limit? 1 hour too long? Some collections take too long to fetch?
-- Create multiple jobs so no collection has to wait?
+- Add jobs for other type of data
+- Dockerize for easier use (in progress)
 
 ## Technologies
 - Ruby on Rails
